@@ -1,34 +1,27 @@
 import React, { useState } from "react";
-import InputField from "../components/InputField";
-import { signUp } from "../services/userApi";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { Link, useNavigate } from "react-router-dom";
+import InputField from "../components/InputField";
+import { login } from "../services/userApi";
 
-const SignUp = () => {
+const Login = () => {
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const navigate = useNavigate();
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await signUp({
+      const response = await login({
         email,
-        name,
-        phoneNo: phone,
+
         password,
-        confirmPassword,
       });
       setEmail("");
-      setName("");
-      setPhone("");
       setPassword("");
-      setConfirmPassword("");
-      navigate("/login")
+      console.log(response.data);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       toast.success(response?.message);
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message);
@@ -45,7 +38,7 @@ const SignUp = () => {
             className="mx-auto h-10 w-auto"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign up to your account
+            Login
           </h2>
         </div>
 
@@ -61,24 +54,6 @@ const SignUp = () => {
             />
 
             <InputField
-              label="Name"
-              type="text"
-              name="name"
-              required
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-            />
-
-            <InputField
-              label="Phone Number"
-              type="number"
-              name="phone"
-              required
-              onChange={(e) => setPhone(e.target.value)}
-              value={phone}
-            />
-
-            <InputField
               label="Password"
               type="password"
               name="password"
@@ -87,30 +62,22 @@ const SignUp = () => {
               value={password}
             />
 
-            <InputField
-              label="Confirm Password"
-              type="password"
-              name="confirmPassword"
-              required
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              value={confirmPassword}
-            />
             <div>
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Sign Up
+                Login
               </button>
             </div>
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
             <Link
-              to="/login"
+              to="/"
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
             >
-              Already have an account?
+              Don't have an account?
             </Link>
           </p>
         </div>
@@ -119,4 +86,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Login;
