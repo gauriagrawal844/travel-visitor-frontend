@@ -3,11 +3,15 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import InputField from "../components/InputField";
 import { login } from "../services/userApi";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../redux/slices/userSlice";
+//useDispatch => to update the state
+//useSelector => to get the state
 const Login = () => {
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,6 +26,9 @@ const Login = () => {
       console.log(response.data);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem("isAdmin", response.data.user.role === "admin");
+      localStorage.setItem("isAuthenticated", true);
+      dispatch(setUser({ ...response.data.user, token: response.data.token }));
       toast.success(response?.message);
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message);
@@ -74,7 +81,7 @@ const Login = () => {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             <Link
-              to="/"
+              to="/signup"
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
             >
               Don't have an account?
