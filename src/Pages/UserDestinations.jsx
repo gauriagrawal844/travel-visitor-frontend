@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
+import { Link } from "react-router-dom";
 
 const UserDestinations = () => {
-  return (
-    <div>UserDestinations</div>
-  )
-}
+  return <Link to={"/destinations"}>Destinations</Link>;
+};
 
-export default UserDestinations
+export default UserDestinations;

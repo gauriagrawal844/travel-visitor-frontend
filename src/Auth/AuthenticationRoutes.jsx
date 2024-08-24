@@ -8,11 +8,9 @@ const AuthenticationRoutes = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    } else if (
-      location.pathname === "/login" ||
-      location.pathname === "/signup"
+    if (
+      isAuthenticated &&
+      (location.pathname === "/login" || location.pathname === "/signup")
     ) {
       navigate("/");
     }

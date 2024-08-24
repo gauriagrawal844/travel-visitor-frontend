@@ -19,9 +19,8 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(user?.role,token);
-    if (user?.role && token) {
-      console.log("user and token");
+    console.log(user?.role, token);
+    if (user?.role && token && isAuthenticated) {
       dispatch(setUser({ ...user, token }));
     }
   }, []);
