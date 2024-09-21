@@ -80,17 +80,54 @@ const CreateDestinations = () => {
                     Historical Background
                   </label>
                   <ReactQuill
+                    modules={{
+                      toolbar: [
+                        [{ header: [1, 2, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ list: 'ordered' }, { list: 'bullet' }],
+                        ['blockquote', 'code-block'],
+                        [{ script: 'sub' }, { script: 'super' }],
+                        [{ indent: '-1' }, { indent: '+1' }],
+                        [{ direction: 'rtl' }],
+                        [{ size: ['small', false, 'large', 'huge'] }],
+                        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                        [{ color: [] }, { background: [] }],
+                        [{ font: [] }],
+                        [{ align: [] }],
+                        ['clean'],
+                        ['image', 'video', 'link'],
+                      ],
+                    }}
                     theme="snow"
                     value={historicalBackground}
                     className="h-96 "
                     onChange={(value) => setHistoricalBackground(value)}
                   />
                 </div>
+
                 <div className="w-1/2">
                   <label className="block text-sm font-medium text-gray-700">
                     Cultural Significance
                   </label>
                   <ReactQuill
+                    modules={{
+                      toolbar: [
+                        [{ header: [1, 2, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ list: 'ordered' }, { list: 'bullet' }],
+                        ['blockquote', 'code-block'],
+                        [{ script: 'sub' }, { script: 'super' }],
+                        [{ indent: '-1' }, { indent: '+1' }],
+                        [{ direction: 'rtl' }],
+                        [{ size: ['small', false, 'large', 'huge'] }],
+                        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                        [{ color: [] }, { background: [] }],
+                        [{ font: [] }],
+                        [{ align: [] }],
+                        ['clean'],
+                        ['image', 'video', 'link'],
+                      ],
+                    }}
                     theme="snow"
                     value={culturalSignificance}
                     className="h-96 "
@@ -104,6 +141,24 @@ const CreateDestinations = () => {
                     Tourist Attractions
                   </label>
                   <ReactQuill
+                    modules={{
+                      toolbar: [
+                        [{ header: [1, 2, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ list: 'ordered' }, { list: 'bullet' }],
+                        ['blockquote', 'code-block'],
+                        [{ script: 'sub' }, { script: 'super' }],
+                        [{ indent: '-1' }, { indent: '+1' }],
+                        [{ direction: 'rtl' }],
+                        [{ size: ['small', false, 'large', 'huge'] }],
+                        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                        [{ color: [] }, { background: [] }],
+                        [{ font: [] }],
+                        [{ align: [] }],
+                        ['clean'],
+                        ['image', 'video', 'link'],
+                      ],
+                    }}
                     theme="snow"
                     value={touristAttractions}
                     className="h-96 "
@@ -115,6 +170,24 @@ const CreateDestinations = () => {
                     Local Cuisines
                   </label>
                   <ReactQuill
+                    modules={{
+                      toolbar: [
+                        [{ header: [1, 2, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ list: 'ordered' }, { list: 'bullet' }],
+                        ['blockquote', 'code-block'],
+                        [{ script: 'sub' }, { script: 'super' }],
+                        [{ indent: '-1' }, { indent: '+1' }],
+                        [{ direction: 'rtl' }],
+                        [{ size: ['small', false, 'large', 'huge'] }],
+                        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                        [{ color: [] }, { background: [] }],
+                        [{ font: [] }],
+                        [{ align: [] }],
+                        ['clean'],
+                        ['image', 'video', 'link'],
+                      ],
+                    }}
                     theme="snow"
                     value={localCuisines}
                     className="h-96 "
@@ -126,6 +199,24 @@ const CreateDestinations = () => {
                     Travel Tips
                   </label>
                   <ReactQuill
+                    modules={{
+                      toolbar: [
+                        [{ header: [1, 2, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ list: 'ordered' }, { list: 'bullet' }],
+                        ['blockquote', 'code-block'],
+                        [{ script: 'sub' }, { script: 'super' }],
+                        [{ indent: '-1' }, { indent: '+1' }],
+                        [{ direction: 'rtl' }],
+                        [{ size: ['small', false, 'large', 'huge'] }],
+                        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                        [{ color: [] }, { background: [] }],
+                        [{ font: [] }],
+                        [{ align: [] }],
+                        ['clean'],
+                        ['image', 'video', 'link'],
+                      ],
+                    }}
                     theme="snow"
                     value={travelTips}
                     className="h-96 "
