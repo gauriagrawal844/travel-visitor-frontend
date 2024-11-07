@@ -7,6 +7,7 @@ import Destination from "./Pages/Destinations";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import Navbar from "./UI/Navbar";
+import Footer from "./UI/Footer";
 import { useDispatch } from "react-redux";
 import { setUser } from "./redux/slices/userSlice";
 import UserDestinations from "./Pages/UserDestinations";
@@ -55,7 +56,9 @@ const App = () => {
           }
         />
       </Routes>
-      <Toaster richColors position="top-center" />;
+      <Toaster richColors position="top-center" />
+      <Footer />
+
     </BrowserRouter>
   );
 };

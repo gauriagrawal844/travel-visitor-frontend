@@ -22,18 +22,10 @@ const CreateDestinations = () => {
       const response = await createDestination({
         destination,
         historicalBackground,
-        culturalSignificance,
-        touristAttractions,
-        localCuisines,
-        travelTips,
         image,
       });
       setDestination("");
       setHistoricalBackground("");
-      setCulturalSignificance("");
-      setTouristAttractions("");
-      setLocalCuisines("");
-      setTravelTips("");
       setImage("");
       toast.success(response?.message);
     } catch (error) {
@@ -47,7 +39,7 @@ const CreateDestinations = () => {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             alt="Your Company"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+            src="https://marketplace.canva.com/EAFvvrEdW20/1/0/1600w/canva-blue-and-yellow-illustrative-travel-agency-logo-TWAjs1N3SXo.jpg"
             className="mx-auto h-10 w-auto"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -77,7 +69,7 @@ const CreateDestinations = () => {
               <div className="flex gap-4">
                 <div className="w-1/2">
                   <label className="block text-sm font-medium text-gray-700">
-                    Historical Background
+                    About
                   </label>
                   <ReactQuill
                     modules={{
@@ -104,129 +96,11 @@ const CreateDestinations = () => {
                     onChange={(value) => setHistoricalBackground(value)}
                   />
                 </div>
-
-                <div className="w-1/2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Cultural Significance
-                  </label>
-                  <ReactQuill
-                    modules={{
-                      toolbar: [
-                        [{ header: [1, 2, false] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ list: 'ordered' }, { list: 'bullet' }],
-                        ['blockquote', 'code-block'],
-                        [{ script: 'sub' }, { script: 'super' }],
-                        [{ indent: '-1' }, { indent: '+1' }],
-                        [{ direction: 'rtl' }],
-                        [{ size: ['small', false, 'large', 'huge'] }],
-                        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                        [{ color: [] }, { background: [] }],
-                        [{ font: [] }],
-                        [{ align: [] }],
-                        ['clean'],
-                        ['image', 'video', 'link'],
-                      ],
-                    }}
-                    theme="snow"
-                    value={culturalSignificance}
-                    className="h-96 "
-                    onChange={(value) => setCulturalSignificance(value)}
-                  />
-                </div>
               </div>
-              <div className="flex gap-4">
-                <div className="w-1/3">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Tourist Attractions
-                  </label>
-                  <ReactQuill
-                    modules={{
-                      toolbar: [
-                        [{ header: [1, 2, false] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ list: 'ordered' }, { list: 'bullet' }],
-                        ['blockquote', 'code-block'],
-                        [{ script: 'sub' }, { script: 'super' }],
-                        [{ indent: '-1' }, { indent: '+1' }],
-                        [{ direction: 'rtl' }],
-                        [{ size: ['small', false, 'large', 'huge'] }],
-                        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                        [{ color: [] }, { background: [] }],
-                        [{ font: [] }],
-                        [{ align: [] }],
-                        ['clean'],
-                        ['image', 'video', 'link'],
-                      ],
-                    }}
-                    theme="snow"
-                    value={touristAttractions}
-                    className="h-96 "
-                    onChange={(value) => setTouristAttractions(value)}
-                  />
-                </div>
-                <div className="w-1/3">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Local Cuisines
-                  </label>
-                  <ReactQuill
-                    modules={{
-                      toolbar: [
-                        [{ header: [1, 2, false] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ list: 'ordered' }, { list: 'bullet' }],
-                        ['blockquote', 'code-block'],
-                        [{ script: 'sub' }, { script: 'super' }],
-                        [{ indent: '-1' }, { indent: '+1' }],
-                        [{ direction: 'rtl' }],
-                        [{ size: ['small', false, 'large', 'huge'] }],
-                        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                        [{ color: [] }, { background: [] }],
-                        [{ font: [] }],
-                        [{ align: [] }],
-                        ['clean'],
-                        ['image', 'video', 'link'],
-                      ],
-                    }}
-                    theme="snow"
-                    value={localCuisines}
-                    className="h-96 "
-                    onChange={(value) => setLocalCuisines(value)}
-                  />
-                </div>
-                <div className="w-1/3">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Travel Tips
-                  </label>
-                  <ReactQuill
-                    modules={{
-                      toolbar: [
-                        [{ header: [1, 2, false] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ list: 'ordered' }, { list: 'bullet' }],
-                        ['blockquote', 'code-block'],
-                        [{ script: 'sub' }, { script: 'super' }],
-                        [{ indent: '-1' }, { indent: '+1' }],
-                        [{ direction: 'rtl' }],
-                        [{ size: ['small', false, 'large', 'huge'] }],
-                        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                        [{ color: [] }, { background: [] }],
-                        [{ font: [] }],
-                        [{ align: [] }],
-                        ['clean'],
-                        ['image', 'video', 'link'],
-                      ],
-                    }}
-                    theme="snow"
-                    value={travelTips}
-                    className="h-96 "
-                    onChange={(value) => setTravelTips(value)}
-                  />
-                </div>
-              </div>
+             
             </div>
 
-            <div className="p-14 flex justify-center">
+            <div className="p-24 flex justify-center">
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
