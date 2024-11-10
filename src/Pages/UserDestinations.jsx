@@ -69,7 +69,7 @@ const StyledCarousel = styled.div`
 const StyledButton = styled.button`
   margin:20px;
   padding: 10px 20px;
-  width:95%;
+  width:97%;
   font-size: 1.1rem;
   background-color:blue;
   border: none;
