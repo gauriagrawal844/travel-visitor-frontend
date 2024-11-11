@@ -11,12 +11,31 @@ export const getDestination = async (query) => {
 };
 
 export const createDestination = async (data) => {
-  const response = await http.post("/destination/create", data);
+  const formData = new FormData();
+  // data.forEach((value, key) => {
+  //   formData.append(key, value);
+  // });
+  Object.keys(data).forEach((key) => {
+    formData.append(key, data[key]);
+  });
+  const response = await http.post("/destination/create", data,{
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };
 
 export const updateDestination = async (id, data) => {
-  const response = await http.put(`/destination/update/${id}`, data);
+  const formData = new FormData();
+  Object.keys(data).forEach((key) => {
+    formData.append(key, data[key]);
+  });
+  const response = await http.put(`/destination/update/${id}`, data,{
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };
 

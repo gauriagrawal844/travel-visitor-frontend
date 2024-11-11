@@ -12,6 +12,10 @@ import { useDispatch } from "react-redux";
 import { setUser } from "./redux/slices/userSlice";
 import UserDestinations from "./Pages/UserDestinations";
 import AuthenticationRoutes from "./Auth/AuthenticationRoutes";
+import Contact from "./Pages/Contact";
+import OurServices from "./Pages/OurServices";  
+import About from "./Pages/About";
+import CardDetails from "./Pages/CardDetails";
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -55,6 +59,11 @@ const App = () => {
             </AdminRoutes>
           }
         />
+
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/ourservices" element={<OurServices />} />
+        <Route path="/Details/:id" element={<CardDetails/>} />
       </Routes>
       <Toaster richColors position="top-center" />
       <Footer />
