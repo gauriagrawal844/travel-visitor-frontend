@@ -16,7 +16,8 @@ const AdminRoutes = ({ children }) => {
     return children;
   }
 
-  return <h1>You are not an admin</h1>;
+  // return <h1>You are not an admin</h1>;
+  return children
 };
 
 export default AdminRoutes;

@@ -3,9 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getDestinations } from "../services/destinationApi";
 
-
 const StyledCarousel = styled.div`
   width: 100%;
+  position: relative;
+  overflow: hidden;
+
   .carousel-item {
     position: relative;
     height: 600px;
@@ -20,6 +22,15 @@ const StyledCarousel = styled.div`
       opacity: 0.8;
     }
 
+    .carousel-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
     .carousel-caption {
       position: absolute;
       top: 50%;
@@ -29,10 +40,12 @@ const StyledCarousel = styled.div`
       text-align: center;
       padding: 20px;
       border-radius: 10px;
+      max-width: 90%;
+      background-color: rgba(0, 0, 0, 0.5);
     }
 
     h5 {
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: bold;
       margin-bottom: 10px;
     }
@@ -47,10 +60,10 @@ const StyledCarousel = styled.div`
   .carousel-control-next {
     height: 50px;
     width: 50px;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.6);
     border-radius: 50%;
     border: none;
-    opacity: 0.6;
+    opacity: 0.7;
     transition: opacity 0.5s ease-in-out;
     margin-top: 250px;
 
@@ -58,45 +71,37 @@ const StyledCarousel = styled.div`
       opacity: 1;
     }
   }
-
-  .carousel-control-prev-icon,
-  .carousel-control-next-icon {
-    font-size: 1.5rem;
-    color: white;
-  }
 `;
 
 const StyledButton = styled.button`
-  margin: 20px;
-  padding: 10px 20px;
-  width: 97%;
-  font-size: 1.1rem;
-  background-color: blue;
+  margin: 20px auto;
+  padding: 12px 25px;
+  font-size: 1.2rem;
+  background-color: #007bff;
   border: none;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-
-  a {
-    color: white;
-    text-decoration: none;
-  }
+  color: white;
+  border-radius: 8px;
+  display: block;
+  text-align: center;
+  cursor: pointer;
+  width: 90%;
+  max-width: 300px;
 
   &:hover {
-    background-color: blue;
-    opacity: 0.5;
+    background-color: #0056b3;
   }
 `;
 
 const IntroText = styled.div`
-  margin: 20px auto;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   color: #333;
   max-width: 800px;
+  margin: 40px auto 20px;
   padding: 0 20px;
 
   p {
-    line-height: 1.5;
+    line-height: 1.6;
   }
 `;
 
@@ -104,18 +109,23 @@ const StyledCards = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 20px;
   margin: 40px 0;
+  padding: 0 20px;
 
   .card {
     width: 300px;
     margin: 15px;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    background: white;
 
     &:hover {
-      transform: translateY(-5px);
+      transform: translateY(-10px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     }
 
     img {
@@ -125,18 +135,19 @@ const StyledCards = styled.div`
     }
 
     .card-body {
-      padding: 15px;
+      padding: 20px;
       text-align: center;
 
       h5 {
-        font-size: 1.5rem;
-        margin-bottom: 10px;
-        color: #333;
+        font-size: 1.4rem;
+        margin-bottom: 12px;
+        color: #007bff;
       }
 
       p {
         font-size: 1rem;
         color: #666;
+        line-height: 1.4;
       }
     }
   }
@@ -160,96 +171,50 @@ const carouselItems = [
   },
 ];
 
-const cardItems = [
-  {
-    src: "https://images.pexels.com/photos/346529/pexels-photo-346529.jpeg",
-    title: "Tropical Paradise",
-    description: "Enjoy crystal-clear waters, sandy beaches, and swaying palm trees.",
-    id: 1,
-  },
-  {
-    src: "https://images.pexels.com/photos/132037/pexels-photo-132037.jpeg",
-    title: "Mountain Escape",
-    description: "Explore peaceful trails and scenic vistas in high-altitude destinations.",
-    id: 2,
-  },
-  {
-    src: "https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg",
-    title: "City Lights",
-    description: "Discover the energy and excitement of the world's most famous cities.",
-    id: 3,
-  },
-  {
-    src: "https://images.pexels.com/photos/4827/nature-forest-trees-fog.jpeg",
-    title: "Misty Forests",
-    description: "Wander through enchanting, mist-filled forests and reconnect with nature.",
-    id: 4,
-  },
-  {
-    src: "https://images.unsplash.com/photo-1457264635001-828d0cbd483e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8NXx8fGVufDB8fHx8fA%3D%3D&w=1200&h=800",
-    title: "Desert Dunes",
-    description: "Experience the vast and quiet beauty of golden desert landscapes.",
-    id: 5,
-  },
-  {
-    src: "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg",
-    title: "Historical Wonders",
-    description: "Step back in time with visits to ancient ruins and cultural sites.",
-    id: 6,
-  },
-  {
-    src: "https://images.pexels.com/photos/258385/pexels-photo-258385.jpeg",
-    title: "Island Escapes",
-    description: "Relax on secluded islands with breathtaking views and crystal-clear waters.",
-    id: 7,
-  },
-  {
-    src: "https://images.pexels.com/photos/1581792/pexels-photo-1581792.jpeg",
-    title: "Countryside Retreats",
-    description: "Embrace tranquility and scenic beauty in picturesque rural settings.",
-    id: 8,
-  },
-];
-
 const UserDestinations = () => {
   const navigate = useNavigate();
   const [destinations, setDestinations] = useState([]);
 
   const handleClick = (id) => {
     navigate(`/Details/${id}`);
-    console.log(id);
   };
 
   useEffect(() => {
     getDestinations().then((response) => {
       setDestinations(response.data);
-      // console.log(response);
     });
   }, []);
-
 
   return (
     <>
       <img
         src="https://travelmatevr.com/wp-content/uploads/2023/11/Screenshot-2023-11-03-at-13.20.20-1.png"
         alt="Welcome to TravelMate"
+        style={{ width: "100%", maxHeight: "450px", objectFit: "cover" }}
       />
 
       <IntroText>
         <p>
           Welcome to TravelMate, your gateway to breathtaking destinations
           around the world! From serene beaches and rugged mountains to vibrant
-          cityscapes, we’re here to inspire your next great adventure. Dive
-          into a world of travel possibilities and start planning your
-          unforgettable journey today!
+          cityscapes, we’re here to inspire your next great adventure. Dive into
+          a world of travel possibilities and start planning your unforgettable
+          journey today!
         </p>
       </IntroText>
 
-      <StyledCarousel id="carouselExampleAutoplaying" className="carousel slide" data-bs-ride="carousel">
+      <StyledCarousel
+        id="carouselExampleAutoplaying"
+        className="carousel slide p-10"
+      >
         <div className="carousel-inner">
           {carouselItems.map((item, index) => (
-            <div className={`carousel-item ${index === 0 ? "active" : ""}`} key={index}>
+            <div
+              className={`carousel-item ${index === 0 ? "active" : ""}`}
+              key={index}
+            >
               <img src={item.src} className="img-fluid" alt={item.title} />
+              <div className="carousel-overlay"></div>
               <div className="carousel-caption">
                 <h5>{item.title}</h5>
                 <p>{item.description}</p>
@@ -257,35 +222,51 @@ const UserDestinations = () => {
             </div>
           ))}
         </div>
-        <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+        <button
+          className="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExampleAutoplaying"
+          data-bs-slide="prev"
+        >
+          <span
+            className="carousel-control-prev-icon"
+            aria-hidden="true"
+          ></span>
           <span className="visually-hidden">Previous</span>
         </button>
-        <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-          <span className="carousel-control-next-icon" aria-hidden="true"></span>
+        <button
+          className="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExampleAutoplaying"
+          data-bs-slide="next"
+        >
+          <span
+            className="carousel-control-next-icon"
+            aria-hidden="true"
+          ></span>
           <span className="visually-hidden">Next</span>
         </button>
       </StyledCarousel>
 
       <StyledCards>
-        {destinations.map((item, index) => (
-          <div onClick={() => handleClick(item._id)} className="card" key={index}>
+        {destinations.map((item) => (
+          <div
+            onClick={() => handleClick(item._id)}
+            className="card"
+            key={item._id}
+          >
             <img src={item.image} alt={item.destination} />
             <div className="card-body">
               <h5>{item.destination}</h5>
               <div dangerouslySetInnerHTML={{ __html: item.about }} />
-                 
-              </div>
             </div>
+          </div>
         ))}
       </StyledCards>
 
       <Link to="/destinations">
-        <StyledButton type="button" className="btn btn-secondary">
-          Explore Destinations
-        </StyledButton>
+        <StyledButton type="button">Add New Destination</StyledButton>
       </Link>
-
     </>
   );
 };
