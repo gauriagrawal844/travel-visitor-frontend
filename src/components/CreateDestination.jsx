@@ -184,7 +184,20 @@ export default function CreateDestinations({
                         { indent: "+1" },
                       ],
                       ["link", "image"],
-                      ["clean"],
+                      ["clean"], [{ header: [1, 2, 3, 4, 5, false] }], // Adds more header levels
+      [{ font: [] }], // Font family
+      [{ size: [] }], // Font size
+      ["bold", "italic", "underline", "strike", "blockquote"], // Basic formatting
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ], // Lists and indentation
+      [{ align: [] }], // Text alignment
+      [{ color: [] }, { background: [] }], // Text color and background color
+      ["link", "image", "video"], // Media options
+      ["clean"], // Clear formatting
                     ],
                   }}
                 />

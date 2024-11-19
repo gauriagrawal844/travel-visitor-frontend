@@ -1,63 +1,99 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getDestination, getDestinations } from "../services/destinationApi";
 import { FaStar, FaPlane, FaMapMarkerAlt, FaRegSmile } from "react-icons/fa";
+import CustomizedTrip from "../components/CustomizedTrip";
 
 const CardDetails = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Get the current ID from the route params
   const [destination, setDestination] = useState({});
   const [recommendedDestinations, setRecommendedDestinations] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch the current destination based on the URL parameter
-    const query = `?_id=${id}`;
-    getDestination(query).then((response) => {
-      setDestination(response.data);
-    });
+    // Fetch the current destination and recommended destinations in one effect
+    const fetchDestinationData = async () => {
+      try {
+        const destinationResponse = await getDestination(`?_id=${id}`);
+        setDestination(destinationResponse.data);
 
-    // Fetch all destinations and filter out the current one
-    getDestinations().then((response) => {
-      const otherDestinations = response.data.filter((dest) => dest._id !== id);
-      setRecommendedDestinations(otherDestinations);
-    });
-  }, [id]);
+        const allDestinations = await getDestinations();
+        const otherDestinations = allDestinations.data.filter((dest) => dest._id !== id);
+        setRecommendedDestinations(otherDestinations);
+      } catch (error) {
+        console.error("Failed to fetch destination data", error);
+      }
+    };
+
+    fetchDestinationData();
+  }, [id]); // Re-run the effect whenever `id` changes
+
+  const handleNavigate = (destinationId) => {
+    navigate(`/details/${destinationId}`);
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 pb-10">
       {/* Header Section */}
-      <header className="bg-blue-600 text-white py-8 px-6 text-center">
-        <h1 className="text-4xl font-bold">Destinations to Travel</h1>
-        <p className="mt-4 max-w-2xl mx-auto text-lg">
-          Discover breathtaking destinations around the world, perfect for your
-          next adventure.
-        </p>
-        <button className="mt-6 px-6 py-3 bg-yellow-500 text-blue-900 font-semibold rounded-lg hover:bg-yellow-600 transition duration-200">
-          Book Now
-        </button>
+      <header
+        className="relative bg-cover bg-center h-96 flex items-center justify-center"
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80')",
+        }}
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-4">
+            Destinations to Travel
+          </h1>
+          <p className="mt-4 max-w-2xl mx-auto text-xl sm:text-2xl text-gray-200">
+            Discover breathtaking destinations around the world, perfect for your
+            next adventure.
+          </p>
+          <p className="mt-8 text-lg sm:text-xl text-yellow-300 font-semibold hover:text-yellow-400 transition duration-300">
+            Start planning your journey today
+          </p>
+        </div>
       </header>
 
       {/* Main Destination Content */}
-      <main className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden mt-10 mb-20">
-        {destination.image && (
-          <img
-            src={destination.image}
-            alt={destination.destination}
-            className="w-full h-64 object-cover"
-          />
-        )}
-        <div className="p-8">
-          <h2 className="text-3xl font-semibold text-gray-800 mb-4">
-            {destination.destination}
-          </h2>
-          <div
-            className="prose max-w-none text-gray-700"
-            dangerouslySetInnerHTML={{ __html: destination.about }}
-          />
-          <button className="mt-6 w-full py-3 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition duration-200">
-            Plan Your Trip
-          </button>
-        </div>
-      </main>
+      <main className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden mt-10 mb-20">
+  <div className="relative">
+    {destination.image && (
+      <img
+        src={destination.image}
+        alt={destination.destination}
+        className="aspect-auto w-full object-cover"
+      />
+    )}
+    <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-75"></div>
+    <div className="absolute bottom-4 left-4 text-white space-y-2">
+      <h2 className="text-3xl font-bold">{destination.destination}</h2>
+      <p className="text-sm opacity-90">
+        {destination.tagline || "A beautiful destination awaits you!"}
+      </p>
+    </div>
+  </div>
+  <div className="p-8">
+    <h3 className="text-2xl font-semibold text-gray-800 mb-4">
+      About the Destination
+    </h3>
+    <div
+      className="prose max-w-none text-gray-700 ql-editor"
+      dangerouslySetInnerHTML={{ __html: destination.about }}
+    />
+    <div className="mt-6 flex justify-center">
+      <button
+        onClick={() => navigate("/contact")}
+        className="py-3 px-6 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300 shadow-lg"
+      >
+        Plan Your Trip
+      </button>
+    </div>
+  </div>
+</main>
+
 
       {/* Recommended Destinations Section */}
       <section className="max-w-6xl mx-auto px-6 py-16">
@@ -85,7 +121,10 @@ const CardDetails = () => {
                   className="prose max-w-none text-gray-700 line-clamp-3"
                   dangerouslySetInnerHTML={{ __html: dest.about }}
                 />
-                <button className="mt-4 px-4 py-2 bg-indigo-500 text-white font-medium rounded-md hover:bg-indigo-600 transition duration-200">
+                <button
+                  onClick={() => handleNavigate(dest._id)} // Navigate to the new destination
+                  className="mt-4 px-4 py-2 bg-indigo-500 text-white font-medium rounded-md hover:bg-indigo-600 transition duration-200"
+                >
                   Learn More
                 </button>
               </div>
@@ -94,8 +133,8 @@ const CardDetails = () => {
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
-      <section className="bg-blue-50 py-16">
+     {/* Why Choose Us Section */}
+     <section className="bg-blue-50 py-16">
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">
           Why Choose Us
         </h2>
@@ -104,8 +143,7 @@ const CardDetails = () => {
             {
               icon: <FaStar className="text-yellow-500 text-3xl" />,
               title: "Top Destinations",
-              description:
-                "Handpicked locations and activities to make your trip unforgettable.",
+              description: "Handpicked locations and activities to make your trip unforgettable.",
             },
             {
               icon: <FaPlane className="text-blue-500 text-3xl" />,
@@ -155,6 +193,8 @@ const CardDetails = () => {
           ))}
         </div>
       </section>
+      
+      <CustomizedTrip />
     </div>
   );
 };

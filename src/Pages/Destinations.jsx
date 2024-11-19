@@ -8,11 +8,11 @@ const DestinationCard = ({
   destination,
   onEdit,
   onDelete,
-  showFull,
-  toggleShowFull,
+  isExpanded,
+  toggleExpand,
 }) => {
   return (
-    <div className="w-full max-w-sm bg-white rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+    <div className={`w-full max-w-sm bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 ${isExpanded ? 'scale-105 z-10' : 'hover:scale-105'}`}>
       <div className="relative">
         <img
           src={destination.image}
@@ -23,18 +23,18 @@ const DestinationCard = ({
           {destination.destination}
         </h2>
       </div>
-      <div className="p-5">
-        <div className={`prose max-w-none ${showFull ? "" : "line-clamp-3"}`}>
-          <div dangerouslySetInnerHTML={{ __html: destination.about }} />
+      <div className={`p-5 ${isExpanded ? 'max-h-full' : 'max-h-32'} overflow-hidden transition-all duration-300`}>
+        <div className="prose max-w-none ql-editor">
+          <p dangerouslySetInnerHTML={{ __html: destination.about }} />
         </div>
       </div>
       <div className="px-5 pb-5 flex flex-col sm:flex-row gap-3 justify-between items-center">
         <button
           className="w-full sm:w-auto px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300 flex items-center justify-center text-sm"
-          onClick={toggleShowFull}
+          onClick={toggleExpand}
         >
           <AiOutlineEye className="mr-1" />
-          {showFull ? "View Less" : "View More"}
+          {isExpanded ? "View Less" : "View More"}
         </button>
         <div className="flex gap-2 w-full sm:w-auto">
           <button
@@ -58,19 +58,20 @@ const DestinationCard = ({
 const Destinations = () => {
   const [destinations, setDestinations] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
-  const [currentDestination, setCurrentDestination] = useState(null); // Stores the destination to be edited
-  const [showFull, setShowFull] = useState(false);
+  const [currentDestination, setCurrentDestination] = useState(null);
+  const [expandedId, setExpandedId] = useState(null);
 
   useEffect(() => {
     const getTravelDestinations = async () => {
       const response = await getDestinations();
       setDestinations(response.data);
-      console.log(response.data);
     };
     getTravelDestinations();
   }, []);
 
-  const toggleShowFull = () => setShowFull(!showFull);
+  const toggleExpand = (id) => {
+    setExpandedId(expandedId === id ? null : id);
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -89,7 +90,7 @@ const Destinations = () => {
 
   const handleCreate = () => {
     setIsEditing(true);
-    setCurrentDestination(null); // null indicates a new destination
+    setCurrentDestination(null);
   };
 
   const handleComplete = () => {
@@ -99,7 +100,6 @@ const Destinations = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen py-10">
-      {/* Show either the form or the button for creating a new destination */}
       {!isEditing && (
         <button
           onClick={handleCreate}
@@ -109,7 +109,6 @@ const Destinations = () => {
         </button>
       )}
 
-      {/* Render CreateDestinations only when creating or editing */}
       {isEditing ? (
         <CreateDestinations
           setDestinations={setDestinations}
@@ -119,15 +118,15 @@ const Destinations = () => {
           onComplete={handleComplete}
         />
       ) : (
-        <div className="flex flex-grow gap-10 w-full flex-wrap mt-10 p-10">
+        <div className="flex flex-wrap justify-center gap-10 w-full mt-10 p-10">
           {destinations.map((destination) => (
             <DestinationCard
               key={destination._id}
               destination={destination}
               onEdit={() => handleEdit(destination)}
               onDelete={handleDelete}
-              showFull={showFull}
-              toggleShowFull={toggleShowFull}
+              isExpanded={expandedId === destination._id}
+              toggleExpand={() => toggleExpand(destination._id)}
             />
           ))}
         </div>

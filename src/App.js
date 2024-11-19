@@ -16,6 +16,7 @@ import Contact from "./Pages/Contact";
 import OurServices from "./Pages/OurServices";  
 import About from "./Pages/About";
 import CardDetails from "./Pages/CardDetails";
+import ScrollToTop from "./components/ScrollToTop";
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -33,6 +34,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Navbar />
+      <ScrollToTop/>
       <Routes>
         <Route path="/" element={<UserDestinations />} />
         <Route

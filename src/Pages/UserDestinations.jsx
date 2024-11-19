@@ -1,157 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { getDestinations } from "../services/destinationApi";
-
-const StyledCarousel = styled.div`
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-
-  .carousel-item {
-    position: relative;
-    height: 600px;
-    background-position: center;
-    background-size: cover;
-
-    img {
-      display: block;
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-      opacity: 0.8;
-    }
-
-    .carousel-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.4);
-    }
-
-    .carousel-caption {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      text-align: center;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 90%;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-
-    h5 {
-      font-size: 2.5rem;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    p {
-      font-size: 1.2rem;
-      margin-bottom: 0;
-    }
-  }
-
-  .carousel-control-prev,
-  .carousel-control-next {
-    height: 50px;
-    width: 50px;
-    background-color: rgba(0, 0, 0, 0.6);
-    border-radius: 50%;
-    border: none;
-    opacity: 0.7;
-    transition: opacity 0.5s ease-in-out;
-    margin-top: 250px;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-`;
-
-const StyledButton = styled.button`
-  margin: 20px auto;
-  padding: 12px 25px;
-  font-size: 1.2rem;
-  background-color: #007bff;
-  border: none;
-  color: white;
-  border-radius: 8px;
-  display: block;
-  text-align: center;
-  cursor: pointer;
-  width: 90%;
-  max-width: 300px;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
-
-const IntroText = styled.div`
-  text-align: center;
-  font-size: 1.6rem;
-  color: #333;
-  max-width: 800px;
-  margin: 40px auto 20px;
-  padding: 0 20px;
-
-  p {
-    line-height: 1.6;
-  }
-`;
-
-const StyledCards = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  margin: 40px 0;
-  padding: 0 20px;
-
-  .card {
-    width: 300px;
-    margin: 15px;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-    cursor: pointer;
-    background: white;
-
-    &:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    }
-
-    img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
-
-    .card-body {
-      padding: 20px;
-      text-align: center;
-
-      h5 {
-        font-size: 1.4rem;
-        margin-bottom: 12px;
-        color: #007bff;
-      }
-
-      p {
-        font-size: 1rem;
-        color: #666;
-        line-height: 1.4;
-      }
-    }
-  }
-`;
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { getDestinations } from '../services/destinationApi';
+import { useSelector } from 'react-redux';
+import CustomizedTrip from '../components/CustomizedTrip';
 
 const carouselItems = [
   {
@@ -174,6 +25,8 @@ const carouselItems = [
 const UserDestinations = () => {
   const navigate = useNavigate();
   const [destinations, setDestinations] = useState([]);
+  const { user } = useSelector((state) => state.user);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const handleClick = (id) => {
     navigate(`/Details/${id}`);
@@ -183,91 +36,117 @@ const UserDestinations = () => {
     getDestinations().then((response) => {
       setDestinations(response.data);
     });
+
+    const interval = setInterval(() => {
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % carouselItems.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
+  const nextSlide = () => {
+    setCurrentSlide((prevSlide) => (prevSlide + 1) % carouselItems.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prevSlide) => (prevSlide - 1 + carouselItems.length) % carouselItems.length);
+  };
+
   return (
-    <>
+    <div className="min-h-screen bg-gray-100">
       <img
         src="https://travelmatevr.com/wp-content/uploads/2023/11/Screenshot-2023-11-03-at-13.20.20-1.png"
         alt="Welcome to TravelMate"
-        style={{ width: "100%", maxHeight: "450px", objectFit: "cover" }}
+        className="w-full max-h-[450px] object-cover"
       />
 
-      <IntroText>
-        <p>
-          Welcome to TravelMate, your gateway to breathtaking destinations
-          around the world! From serene beaches and rugged mountains to vibrant
-          cityscapes, we’re here to inspire your next great adventure. Dive into
-          a world of travel possibilities and start planning your unforgettable
-          journey today!
-        </p>
-      </IntroText>
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="text-center mb-12">
+          <h2 className="text-5xl font-bold text-gray-800 mb-4">Welcome to TravelMate</h2>
+          <p className="text-lg text-gray-600">
+            Your gateway to breathtaking destinations around the world! From serene beaches and rugged mountains to vibrant
+            cityscapes, we're here to inspire your next great adventure. Dive into a world of travel possibilities and start
+            planning your unforgettable journey today!
+          </p>
+        </div>
 
-      <StyledCarousel
-        id="carouselExampleAutoplaying"
-        className="carousel slide p-10"
-      >
-        <div className="carousel-inner">
+        <div className="relative overflow-hidden rounded-lg shadow-lg h-[400px] md:h-[500px]">
           {carouselItems.map((item, index) => (
             <div
-              className={`carousel-item ${index === 0 ? "active" : ""}`}
               key={index}
+              className={`absolute top-0 left-0 w-full h-full transition-opacity duration-500 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'
+                }`}
             >
-              <img src={item.src} className="img-fluid" alt={item.title} />
-              <div className="carousel-overlay"></div>
-              <div className="carousel-caption">
-                <h5>{item.title}</h5>
-                <p>{item.description}</p>
+              <img src={item.src} alt={item.title} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
+                <h3 className="text-3xl md:text-4xl font-bold mb-2 text-center">{item.title}</h3>
+                <p className="text-lg md:text-xl text-center max-w-lg">{item.description}</p>
               </div>
             </div>
           ))}
-        </div>
-        <button
-          className="carousel-control-prev"
-          type="button"
-          data-bs-target="#carouselExampleAutoplaying"
-          data-bs-slide="prev"
-        >
-          <span
-            className="carousel-control-prev-icon"
-            aria-hidden="true"
-          ></span>
-          <span className="visually-hidden">Previous</span>
-        </button>
-        <button
-          className="carousel-control-next"
-          type="button"
-          data-bs-target="#carouselExampleAutoplaying"
-          data-bs-slide="next"
-        >
-          <span
-            className="carousel-control-next-icon"
-            aria-hidden="true"
-          ></span>
-          <span className="visually-hidden">Next</span>
-        </button>
-      </StyledCarousel>
-
-      <StyledCards>
-        {destinations.map((item) => (
-          <div
-            onClick={() => handleClick(item._id)}
-            className="card"
-            key={item._id}
+          <button
+            onClick={prevSlide}
+            className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none"
           >
-            <img src={item.image} alt={item.destination} />
-            <div className="card-body">
-              <h5>{item.destination}</h5>
-              <div dangerouslySetInnerHTML={{ __html: item.about }} />
-            </div>
-          </div>
-        ))}
-      </StyledCards>
+            <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none"
+          >
+            <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
 
-      <Link to="/destinations">
-        <StyledButton type="button">Add New Destination</StyledButton>
-      </Link>
-    </>
+      <div className="max-w-6xl mx-auto px-4 py-12">
+  <h2 className="text-3xl font-bold text-gray-800 text-center mb-10">
+    Explore Destinations
+  </h2>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    {destinations.map((item) => (
+      <div
+        key={item._id}
+        onClick={() => handleClick(item._id)}
+        className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transition-transform hover:scale-105 hover:shadow-lg"
+      >
+        {/* Image Section */}
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={item.image}
+            alt={item.destination}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-40"></div>
+        </div>
+
+        {/* Content Section */}
+        <div className="p-5">
+          <h5 className="text-xl font-semibold text-blue-600 mb-3 truncate">
+            {item.destination}
+          </h5>
+          <p
+            className="text-gray-600 text-sm leading-relaxed line-clamp-3"
+            dangerouslySetInnerHTML={{
+              __html:item?.about?.slice(0,120),
+            }}
+            
+          />
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+      <div className="mb-8">
+        <CustomizedTrip />
+      </div>
+
+    </div>
   );
 };
 
