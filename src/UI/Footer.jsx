@@ -1,28 +1,27 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const footerLinks = [
   {
     title: "Company",
     links: [
-      { name: "About", href: "#" },
-      { name: "Blog", href: "#" },
-      { name: "Jobs", href: "#" },
-      { name: "Contact", href: "#" },
+      { name: "About", href: "/about" },
+      { name: "Contact", href: "/contact" },
     ],
   },
   {
     title: "Support",
     links: [
-      { name: "Help Center", href: "#" },
-      { name: "FAQ", href: "#" },
-      { name: "Contact Us", href: "#" },
+      { name: "Help Center", href: "/helpcenter" },
+      { name: "FAQ", href: "/faq" },
+      { name: "Contact Us", href: "/contact" },
     ],
   },
   {
     title: "Legal",
     links: [
-      { name: "Privacy Policy", href: "#" },
-      { name: "Terms & Conditions", href: "#" },
+      { name: "Privacy Policy", href: "/privacypolicy" },
+      { name: "Terms & Conditions", href: "/terms&condition" },
     ],
   },
 ];
@@ -52,16 +51,16 @@ const Footer = () => {
             </p>
             <div className="flex space-x-6">
               {socialLinks.map((item) => (
-                <a
+                <Link
                   key={item.name}
-                  href={item.href}
+                  to={item.href}
                   className="text-gray-400 hover:text-white transition-colors duration-300"
                 >
                   <span className="sr-only">{item.name}</span>
                   <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d={item.icon} />
                   </svg>
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -75,12 +74,12 @@ const Footer = () => {
                   <ul className="space-y-4">
                     {section.links.map((link) => (
                       <li key={link.name}>
-                        <a
-                          href={link.href}
+                        <Link
+                          to={link.href}
                           className="text-base text-gray-400 hover:text-white transition-colors duration-300"
                         >
                           {link.name}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -96,12 +95,12 @@ const Footer = () => {
                   <ul className="space-y-4">
                     {section.links.map((link) => (
                       <li key={link.name}>
-                        <a
-                          href={link.href}
+                        <Link
+                          to={link.href}
                           className="text-base text-gray-400 hover:text-white transition-colors duration-300"
                         >
                           {link.name}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>

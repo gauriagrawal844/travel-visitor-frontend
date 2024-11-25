@@ -35,23 +35,30 @@ const Navbar = () => {
   const { pathname } = useLocation();
   const isSelected = (path) => path === pathname;
 
-  const [links,setLinks] = useState([ 
+  const [links, setLinks] = useState([
     { to: "/", text: "Home" },
     { to: "/OurServices", text: "Our Services" },
     { to: "/About", text: "About" },
-    { to: "/Contact", text: "Contact" },
+    // { to: "/Contact", text: "Contact" },
   ]);
+  
   useEffect(() => {
-    if(user?.role === 'admin'){
+    if (user?.role === 'admin') {
+      setLinks((prevLinks) => [
+        ...prevLinks,
+        { to: "/destinations", text: "Destinations" },
+        { to: "/contactdetails", text: "Contact Details" },
+      ]);
+    } else {
       setLinks([
         { to: "/", text: "Home" },
         { to: "/OurServices", text: "Our Services" },
         { to: "/About", text: "About" },
-        { to: "/Contact", text: "Contact" },
-        { to: "/destinations", text: "Destinations" },
+        { to: "/Contact", text: "Contact Us" },
       ]);
     }
   }, [user]);
+  
 
   return (
     <nav className="bg-white">

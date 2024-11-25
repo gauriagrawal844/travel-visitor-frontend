@@ -127,9 +127,14 @@ const UserDestinations = () => {
 
         {/* Content Section */}
         <div className="p-5">
+        <div class="flex justify-between">
           <h5 className="text-xl font-semibold text-blue-600 mb-3 truncate">
             {item.destination}
+           </h5>
+          <h5 className="text-xl font-semibold text-blue-600 mb-3 truncate">
+            {item.price && <span className="text-gray-800 text-sm font-semibold">RS.{item.price}</span>}
           </h5>
+          </div>
           <p
             className="text-gray-600 text-sm leading-relaxed line-clamp-3"
             dangerouslySetInnerHTML={{

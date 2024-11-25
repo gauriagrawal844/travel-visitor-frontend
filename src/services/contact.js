@@ -5,3 +5,7 @@ export const sendContact = async (data) => {
     return response.data;
   };
 
+export const getContactDetails = async () => {
+    const response = await http.get("/contact/all");
+    return response.data;
+  };

@@ -18,11 +18,13 @@ export default function CreateDestinations({
   const [about, setAbout] = useState("");
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [price, setPrice] = useState("");
 
   useEffect(() => {
     if (isEditing && destinationToEdit) {
       setDestination(destinationToEdit.destination);
       setAbout(destinationToEdit.about);
+      setPrice(destinationToEdit.price);
       setImage(null);
       setImagePreview(destinationToEdit.image);
     } else {
@@ -33,6 +35,7 @@ export default function CreateDestinations({
   const resetForm = () => {
     setDestination("");
     setAbout("");
+    setPrice("");
     setImage(null);
     setImagePreview(null);
   };
@@ -56,6 +59,7 @@ export default function CreateDestinations({
         const response = await updateDestination(destinationToEdit._id, {
           destination,
           about,
+          price,
           image,
         });
         setDestinations((previous) =>
@@ -70,6 +74,7 @@ export default function CreateDestinations({
         const response = await createDestination({
           destination,
           about,
+          price,
           image,
         });
         setDestinations((previous) => [...previous, response.data]);
@@ -158,6 +163,24 @@ export default function CreateDestinations({
                   />
                 )}
               </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="price"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Price
+              </label>
+              <input
+                type="text"
+                name="price"
+                id="price"
+                required
+                className="mt-2 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 bg-gray-50"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
             </div>
 
             <div>

@@ -69,7 +69,10 @@ const CardDetails = () => {
     )}
     <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-75"></div>
     <div className="absolute bottom-4 left-4 text-white space-y-2">
+    <div class="flex justify-between w-full">
       <h2 className="text-3xl font-bold">{destination.destination}</h2>
+      <h2 className="text-3xl font-bold relative left-[32rem]">PRICE : ₹ {destination.price}</h2>
+      </div>
       <p className="text-sm opacity-90">
         {destination.tagline || "A beautiful destination awaits you!"}
       </p>
