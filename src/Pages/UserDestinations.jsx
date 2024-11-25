@@ -1,274 +1,157 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { getDestinations } from '../services/destinationApi';
+import { useSelector } from 'react-redux';
+import CustomizedTrip from '../components/CustomizedTrip';
 
-const StyledCarousel = styled.div`
-  width: 100%;
-  .carousel-item {
-    position: relative;
-    height: 600px;
-    background-position: center;
-    background-size: cover;
-   
-
-    img {
-      display: block;
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-      opacity: 0.8;
-    }
-
-    .carousel-caption {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      text-align: center;
-      background: rgba(0, 0, 0, 0);
-      padding: 20px;
-      border-radius: 10px;
-    }
-
-    h5 {
-      font-size: 2rem;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    p {
-      font-size: 1.2rem;
-      margin-bottom: 0;
-    }
-  }
-
-  .carousel-control-prev,
-  .carousel-control-next {
-    height: 50px;
-    width: 50px;
-    background-color: rgba(0, 0, 0, 0.4);
-    border-radius: 50%;
-    border: none;
-    opacity: 0.6;
-    transition: opacity 0.5s ease-in-out;
-    margin-top: 250px;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-
-  .carousel-control-prev-icon,
-  .carousel-control-next-icon {
-    font-size: 1.5rem;
-    color: white;
-  }
-`;
-
-const StyledButton = styled.button`
-  margin:20px;
-  padding: 10px 20px;
-  width:95%;
-  font-size: 1.1rem;
-  background-color:blue;
-  border: none;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-
-  a {
-    color: white;
-    text-decoration: none;
-  }
-
-  &:hover {
-    background-color:blue;
-    opacity:0.5;
-  }
-`;
-
-const IntroText = styled.div`
-  margin: 20px auto;
-  text-align: center;
-  font-size: 1.5rem;
-  color: #333;
-  max-width: 800px;
-  padding: 0 20px;
-
-  p {
-    line-height: 1.5;
-  }
-`;
-
-const StyledCards = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 40px 0;
-
-  .card {
-    width: 300px;
-    margin: 15px;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
-
-    &:hover {
-      transform: translateY(-5px);
-    }
-
-    img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
-
-    .card-body {
-      padding: 15px;
-      text-align: center;
-
-      h5 {
-        font-size: 1.5rem;
-        margin-bottom: 10px;
-        color: #333;
-      }
-
-      p {
-        font-size: 1rem;
-        color: #666;
-      }
-    }
-  }
-`;
+const carouselItems = [
+  {
+    src: "https://images.unsplash.com/photo-1727994193255-31518875b3ba?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8YmVhY2hlc3xlbnwwfHwwfHx8MA%3D%3D",
+    title: "Explore the Beaches",
+    description: "Discover the serenity of oceanfront destinations.",
+  },
+  {
+    src: "https://plus.unsplash.com/premium_photo-1676218968741-8179dd7e533f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bW91bnRhaW5zfGVufDB8fDB8fHww&auto=format&fit=crop&w=1170",
+    title: "Conquer the Mountains",
+    description: "Adventure awaits in stunning mountain landscapes.",
+  },
+  {
+    src: "https://images.pexels.com/photos/777059/pexels-photo-777059.jpeg?auto=compress&cs=tinysrgb&w=600&h=400",
+    title: "Discover the Cities",
+    description: "Experience the vibrant life of iconic cities.",
+  },
+];
 
 const UserDestinations = () => {
+  const navigate = useNavigate();
+  const [destinations, setDestinations] = useState([]);
+  const { user } = useSelector((state) => state.user);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const handleClick = (id) => {
+    navigate(`/Details/${id}`);
+  };
+
+  useEffect(() => {
+    getDestinations().then((response) => {
+      setDestinations(response.data);
+    });
+
+    const interval = setInterval(() => {
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % carouselItems.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const nextSlide = () => {
+    setCurrentSlide((prevSlide) => (prevSlide + 1) % carouselItems.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prevSlide) => (prevSlide - 1 + carouselItems.length) % carouselItems.length);
+  };
+
   return (
-    <>
+    <div className="min-h-screen bg-gray-100">
       <img
         src="https://travelmatevr.com/wp-content/uploads/2023/11/Screenshot-2023-11-03-at-13.20.20-1.png"
         alt="Welcome to TravelMate"
+        className="w-full max-h-[450px] object-cover"
       />
 
-      <IntroText>
-        <p>
-          Welcome to TravelMate, your gateway to breathtaking destinations
-          around the world! From serene beaches and rugged mountains to vibrant
-          cityscapes, we’re here to inspire your next great adventure. Dive
-          into a world of travel possibilities and start planning your
-          unforgettable journey today!
-        </p>
-      </IntroText>
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="text-center mb-12">
+          <h2 className="text-5xl font-bold text-gray-800 mb-4">Welcome to TravelMate</h2>
+          <p className="text-lg text-gray-600">
+            Your gateway to breathtaking destinations around the world! From serene beaches and rugged mountains to vibrant
+            cityscapes, we're here to inspire your next great adventure. Dive into a world of travel possibilities and start
+            planning your unforgettable journey today!
+          </p>
+        </div>
 
-      <StyledCarousel id="carouselExampleAutoplaying" className="carousel slide" data-bs-ride="carousel">
-        <div className="carousel-inner">
-          <div className="carousel-item active">
-            <img
-              src="https://images.unsplash.com/photo-1727994193255-31518875b3ba?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8YmVhY2hlc3xlbnwwfHwwfHx8MA%3D%3D"
-              className="img-fluid"
-              alt="Beach"
-            />
-            <div className="carousel-caption">
-              <h5>Explore the Beaches</h5>
-              <p>Discover the serenity of oceanfront destinations.</p>
+        <div className="relative overflow-hidden rounded-lg shadow-lg h-[400px] md:h-[500px]">
+          {carouselItems.map((item, index) => (
+            <div
+              key={index}
+              className={`absolute top-0 left-0 w-full h-full transition-opacity duration-500 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'
+                }`}
+            >
+              <img src={item.src} alt={item.title} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
+                <h3 className="text-3xl md:text-4xl font-bold mb-2 text-center">{item.title}</h3>
+                <p className="text-lg md:text-xl text-center max-w-lg">{item.description}</p>
+              </div>
             </div>
-          </div>
-          <div className="carousel-item">
-            <img
-              src="https://plus.unsplash.com/premium_photo-1676218968741-8179dd7e533f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bW91bnRhaW5zfGVufDB8fDB8fHww&auto=format&fit=crop&w=1170"
-              className="img-fluid"
-              alt="Mountain"
-            />
-            <div className="carousel-caption">
-              <h5>Conquer the Mountains</h5>
-              <p>Adventure awaits in stunning mountain landscapes.</p>
-            </div>
-          </div>
-          <div className="carousel-item">
-            <img
-              src="https://images.pexels.com/photos/777059/pexels-photo-777059.jpeg?auto=compress&cs=tinysrgb&w=600&h=400"
-              className="img-fluid"
-              alt="City"
-            />
-            <div className="carousel-caption">
-              <h5>Discover the Cities</h5>
-              <p>Experience the vibrant life of iconic cities.</p>
-            </div>
-          </div>
+          ))}
+          <button
+            onClick={prevSlide}
+            className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none"
+          >
+            <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none"
+          >
+            <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
         </div>
-        <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Previous</span>
-        </button>
-        <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-          <span className="carousel-control-next-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Next</span>
-        </button>
-      </StyledCarousel>
+      </div>
 
-      <StyledCards>
-        <div className="card">
-          <img src="https://images.pexels.com/photos/346529/pexels-photo-346529.jpeg" alt="Tropical Paradise" />
-          <div className="card-body">
-            <h5>Tropical Paradise</h5>
-            <p>Enjoy crystal-clear waters, sandy beaches, and swaying palm trees.</p>
-          </div>
+      <div className="max-w-6xl mx-auto px-4 py-12">
+  <h2 className="text-3xl font-bold text-gray-800 text-center mb-10">
+    Explore Destinations
+  </h2>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    {destinations.map((item) => (
+      <div
+        key={item._id}
+        onClick={() => handleClick(item._id)}
+        className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transition-transform hover:scale-105 hover:shadow-lg"
+      >
+        {/* Image Section */}
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={item.image}
+            alt={item.destination}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-40"></div>
         </div>
-        <div className="card">
-          <img src="https://images.pexels.com/photos/132037/pexels-photo-132037.jpeg" alt="Mountain Escape" />
-          <div className="card-body">
-            <h5>Mountain Escape</h5>
-            <p>Explore peaceful trails and scenic vistas in high-altitude destinations.</p>
-          </div>
-        </div>
-        <div className="card">
-          <img src="https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg" alt="City Lights" />
-          <div className="card-body">
-            <h5>City Lights</h5>
-            <p>Discover the energy and excitement of the world's most famous cities.</p>
-          </div>
-        </div>
-        <div className="card">
-          <img src="https://images.pexels.com/photos/4827/nature-forest-trees-fog.jpeg" alt="Misty Forests" />
-          <div className="card-body">
-            <h5>Misty Forests</h5>
-            <p>Wander through enchanting, mist-filled forests and reconnect with nature.</p>
-          </div>
-        </div>
-        <div className="card">
-          <img src="https://images.unsplash.com/photo-1457264635001-828d0cbd483e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8NXx8fGVufDB8fHx8fA%3D%3D&w=1200&h=800" alt="Desert Dunes" />
-          <div className="card-body">
-            <h5>Desert Dunes</h5>
-            <p>Experience the vast and quiet beauty of golden desert landscapes.</p>
-          </div>
-        </div>
-        <div className="card">
-          <img src="https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg" alt="Historical Wonders" />
-          <div className="card-body">
-            <h5>Historical Wonders</h5>
-            <p>Step back in time with visits to ancient ruins and cultural sites.</p>
-          </div>
-        </div>
-        <div className="card">
-          <img src="https://images.pexels.com/photos/258385/pexels-photo-258385.jpeg" alt="Island Escapes" />
-          <div className="card-body">
-            <h5>Island Escapes</h5>
-            <p>Relax on secluded islands with breathtaking views and crystal-clear waters.</p>
-          </div>
-        </div>
-        <div className="card">
-          <img src="https://images.pexels.com/photos/1581792/pexels-photo-1581792.jpeg" alt="Countryside Retreats" />
-          <div className="card-body">
-            <h5>Countryside Retreats</h5>
-            <p>Embrace tranquility and scenic beauty in picturesque rural settings.</p>
-          </div>
-        </div>
-      </StyledCards>
 
-      <StyledButton type="button" className="btn btn-secondary">
-        <Link to={"/destinations"}>Explore Destinations</Link>
-      </StyledButton>
-    </>
+        {/* Content Section */}
+        <div className="p-5">
+        <div class="flex justify-between">
+          <h5 className="text-xl font-semibold text-blue-600 mb-3 truncate">
+            {item.destination}
+           </h5>
+          <h5 className="text-xl font-semibold text-blue-600 mb-3 truncate">
+            {item.price && <span className="text-gray-800 text-sm font-semibold">RS.{item.price}</span>}
+          </h5>
+          </div>
+          <p
+            className="text-gray-600 text-sm leading-relaxed line-clamp-3"
+            dangerouslySetInnerHTML={{
+              __html:item?.about?.slice(0,120),
+            }}
+            
+          />
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+      <div className="mb-8">
+        <CustomizedTrip />
+      </div>
+
+    </div>
   );
 };
 

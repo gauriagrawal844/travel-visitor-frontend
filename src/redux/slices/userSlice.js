@@ -15,9 +15,16 @@ const userSlice = createSlice({
       state.isAdmin = action.payload.role === "admin";
       state.token = action.payload.token;
     },
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+      state.isAuthenticated = false;
+      state.isAdmin = false;
+      localStorage.clear();
+    },
   },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, logout } = userSlice.actions;
 
 export default userSlice.reducer;

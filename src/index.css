@@ -3,3 +3,13 @@
 @tailwind components;
 
 @tailwind utilities;
+
+/* Ensure images are displayed inline */
+.ql-editor img {
+    display: inline-block;
+    margin: 5px; /* Add spacing between images */
+    max-width: 200px; /* Optional: Limit the image width */
+    max-height: 150px; /* Optional: Limit the image height */
+    vertical-align: middle; /* Align images properly with text */
+  }
+  

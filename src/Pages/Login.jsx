@@ -41,8 +41,8 @@ const Login = () => {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             alt="Your Company"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            className="mx-auto h-10 w-auto"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5FtS5Nmw19_UejUFZJKSVuA_z517tSDaJ6g&s"
+            className="mx-auto h-14 w-auto"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Login
